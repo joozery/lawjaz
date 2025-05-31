@@ -12,22 +12,20 @@ export default function Dashboard() {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('admin-auth');
     if (!isLoggedIn) {
-      navigate('/admin/login');
+      // 🔁 ป้องกันการวน loop redirect ซ้อน
+      navigate('/admin/login', { replace: true });
     }
   }, [navigate]);
 
   return (
     <div className="flex h-screen w-full bg-gray-50 font-prompt">
-      {/* ✅ Sidebar (ซ้าย) */}
+      {/* ✅ Sidebar */}
       <Sidebar selectedPage={selectedPage} onSelectPage={setSelectedPage} />
 
-      {/* ✅ Content Area */}
+      {/* ✅ Main content */}
       <div className="flex flex-col flex-1 overflow-hidden">
-        {/* ✅ Header ด้านบน */}
         <Header />
-
-        {/* ✅ Main Content Scrollable */}
-        <main className="flex-1 overflow-y-auto  bg-[#f9fafb]">
+        <main className="flex-1 overflow-y-auto bg-[#f9fafb]">
           <MainContent selectedPage={selectedPage} />
         </main>
       </div>

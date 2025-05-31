@@ -1,17 +1,28 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
+import LoginPage from './components/pages/LoginPage';
+
+function PrivateRoute({ children }) {
+  const isAuthenticated = localStorage.getItem('admin-auth');
+  return isAuthenticated ? children : <Navigate to="/admin/login" replace />;
+}
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* ✅ redirect ไปยัง dashboard ถ้ามาที่ / */}
         <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+        <Route path="/admin/login" element={<LoginPage />} />
 
-        {/* ✅ หน้าหลักหลัง login */}
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-
-        {/* TODO: เพิ่มหน้า login ถ้ามี */}
+        {/* ✅ Protect dashboard route */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );
